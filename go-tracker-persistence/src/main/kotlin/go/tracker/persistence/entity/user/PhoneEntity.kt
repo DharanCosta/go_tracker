@@ -1,4 +1,4 @@
-package go.tracker.persistence.entity
+package go.tracker.persistence.entity.user
 
 import jakarta.persistence.*
 
@@ -15,4 +15,6 @@ class PhoneEntity {
 
     @Column(name = "DDD", columnDefinition = "INTEGER", nullable = true)
     var ddd: Int? = null
+
+    var user: UserEntity? = null
 }

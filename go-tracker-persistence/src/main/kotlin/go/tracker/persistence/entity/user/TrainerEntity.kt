@@ -1,13 +1,24 @@
-package go.tracker.persistence.entity
+package go.tracker.persistence.entity.user
 
+import go.tracker.persistence.entity.GoalsEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.OneToMany
+import jakarta.persistence.PrimaryKeyJoinColumn
 import jakarta.persistence.Table
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity(name = "User")
 @Table(name = "USER")
-class TrainerEntity(): UserEntity() {
+@PrimaryKeyJoinColumn(name = "IDT_TRAINER", referencedColumnName = "IDT_USER")
+class TrainerEntity(
+    creationDate: LocalDateTime = LocalDateTime.now(),
+    updateDate: LocalDateTime = LocalDateTime.now()
+): UserEntity(
+    creationDate = creationDate,
+    updateDate = updateDate
+) {
 
     @Column(name = "IGN", columnDefinition = "VARCHAR2(50)", nullable = false, unique = true)
     var ign: String = ""
@@ -26,4 +37,7 @@ class TrainerEntity(): UserEntity() {
 
     @Column(name= "PUBLIC", columnDefinition = "BOOLEAN", nullable = false)
     var public: Boolean? = false
+
+    @OneToMany
+    var goals: List<GoalsEntity>?=  null
 }
