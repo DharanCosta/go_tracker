@@ -1,4 +1,4 @@
-package models.user
+package go.tracker.models.user
 
 data class Phone (
     var id: Long? = null,

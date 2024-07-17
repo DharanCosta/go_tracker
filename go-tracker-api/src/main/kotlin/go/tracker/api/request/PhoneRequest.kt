@@ -2,6 +2,7 @@ package go.tracker.api.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
 data class PhoneRequest(
@@ -11,8 +12,7 @@ data class PhoneRequest(
     var number: String? = null,
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-    @field: NotBlank
-    @field: Size(max = 3)
+    @field: NotNull
     var ddd: Int? = null
 ) {
 

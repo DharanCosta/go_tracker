@@ -16,5 +16,7 @@ class PhoneEntity {
     @Column(name = "DDD", columnDefinition = "INTEGER", nullable = true)
     var ddd: Int? = null
 
-    var user: UserEntity? = null
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "IDT_USER", nullable = false, referencedColumnName = "IDT_USER")
+    var user: AppUserEntity? = null
 }

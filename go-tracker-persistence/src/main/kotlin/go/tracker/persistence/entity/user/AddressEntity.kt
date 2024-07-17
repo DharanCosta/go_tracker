@@ -22,5 +22,7 @@ class AddressEntity {
     @Column(name = "COORDINATES", columnDefinition = "VARCHAR2(20)", nullable = false)
     var coordinates: String = ""
 
-    var user: UserEntity? = null
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "IDT_USER", nullable = false, referencedColumnName = "IDT_USER")
+    var user: AppUserEntity? = null
 }
