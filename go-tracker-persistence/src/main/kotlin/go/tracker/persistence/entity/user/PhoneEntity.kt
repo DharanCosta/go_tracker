@@ -13,8 +13,11 @@ class PhoneEntity {
     @Column(name = "NUMBER", columnDefinition = "VARCHAR2(20)", nullable = false, unique = true)
     var number: String? = null
 
-    @Column(name = "DDD", columnDefinition = "INTEGER", nullable = true)
-    var ddd: Int? = null
+    @Column(name = "COUNTRY_CODE", columnDefinition = "VARCHAR2(20)", nullable = true)
+    var countryCode: String? = null
+
+    @Column(name = "VALIDATED", columnDefinition = "BOOLEAN", nullable = false)
+    var validated: Boolean? = false
 
     @OneToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "IDT_USER", nullable = false, referencedColumnName = "IDT_USER")

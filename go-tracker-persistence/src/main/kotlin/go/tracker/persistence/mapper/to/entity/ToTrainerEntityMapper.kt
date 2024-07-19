@@ -32,7 +32,8 @@ val ToTrainerEntityMapper =
                 }
                 phone = PhoneEntity().apply {
                     number = user.phone?.number
-                    ddd = user.phone?.ddd
+                    countryCode = user.phone?.countryCode
+                    validated = user.phone?.validated
                     this.user = trainerEntity
                 }
             }

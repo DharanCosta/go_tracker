@@ -31,7 +31,7 @@ val ToTrainerMapper =
             phone = Phone().apply {
                 id = trainer.phone?.id
                 number = trainer.phone?.number
-                ddd = trainer.phone?.ddd
+                countryCode = trainer.phone?.countryCode
             }
         }
     }

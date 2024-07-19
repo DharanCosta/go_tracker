@@ -2,6 +2,7 @@ package go.tracker.api.request
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import go.tracker.api.common.validation.constraint.annotation.ValidName
 import go.tracker.models.user.Address
 import go.tracker.models.user.Phone
 import go.tracker.models.user.Trainer
@@ -24,6 +25,7 @@ data class TrainerCreateRequest(
     var password: String? = "",
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+    @field: ValidName
     @field: NotBlank
     @field: Size(max = 150)
     var name: String? = "",
@@ -59,7 +61,6 @@ data class TrainerCreateRequest(
     var initialCatch: Long? = null,
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-    @field: NotNull
     var public: Boolean? = false,
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
@@ -90,7 +91,6 @@ data class TrainerCreateRequest(
             }
             phone = Phone().apply {
                number = trainerRequest.phone?.number
-               ddd = trainerRequest.phone?.ddd
             }
         }
     }

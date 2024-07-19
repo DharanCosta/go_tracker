@@ -3,5 +3,6 @@ package go.tracker.models.user
 data class Phone (
     var id: Long? = null,
     var number: String? = "",
-    var ddd: Int? = null,
+    var countryCode: String? = null,
+    var validated: Boolean? = false
 )
