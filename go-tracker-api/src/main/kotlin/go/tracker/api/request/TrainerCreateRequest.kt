@@ -2,6 +2,7 @@ package go.tracker.api.request
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import go.tracker.api.common.validation.constraint.annotation.UniqueFields
 import go.tracker.api.common.validation.constraint.annotation.ValidName
 import go.tracker.models.user.Address
 import go.tracker.models.user.Phone
@@ -13,6 +14,7 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import java.time.LocalDate
 
+@UniqueFields
 data class TrainerCreateRequest(
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     @field: NotBlank
