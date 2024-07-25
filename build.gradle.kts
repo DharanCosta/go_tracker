@@ -64,7 +64,8 @@ subprojects {
 
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+//        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
 
         // Utils
         implementation("io.github.cdimascio:java-dotenv:5.2.2")
@@ -72,7 +73,7 @@ subprojects {
 
         // Test
         testImplementation("io.mockk:mockk:1.13.7")
-        testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.0")
+        testImplementation ("org.jetbrains.kotlin:kotlin-test-junit5:1.9.0")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.mockito:mockito-core:5.5.0")
 
