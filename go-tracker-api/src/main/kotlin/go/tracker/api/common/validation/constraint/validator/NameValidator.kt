@@ -12,6 +12,4 @@ class NameValidator: ConstraintValidator<ValidName, String> {
 
     override fun isValid(name: String?, context: ConstraintValidatorContext?): Boolean =
         name.isNullOrBlank() || name.trim().matches(Regex(regex))
-
-
 }

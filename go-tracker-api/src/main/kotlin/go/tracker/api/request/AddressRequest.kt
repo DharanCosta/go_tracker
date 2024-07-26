@@ -22,9 +22,6 @@ data class AddressRequest(
     var city: String = "",
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-//    @field: NotBlank (message = MessageCode.REQUIRED_FIELD)
     @field: Size(max = 50)
     var coordinates: String = ""
-) {
-
-}
+)

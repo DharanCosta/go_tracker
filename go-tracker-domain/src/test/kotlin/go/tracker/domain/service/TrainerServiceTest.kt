@@ -35,5 +35,4 @@ class TrainerServiceTest {
         assertEquals(trainerModel.ign, created.ign)
         assertEquals(trainerModel.email, created.email)
     }
-
 }

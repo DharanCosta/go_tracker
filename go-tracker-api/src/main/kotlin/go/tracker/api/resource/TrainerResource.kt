@@ -39,5 +39,4 @@ class TrainerResource(
 
         return ResponseEntity(response, HttpStatus.CREATED)
     }
-
 }

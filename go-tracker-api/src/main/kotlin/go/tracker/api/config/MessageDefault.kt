@@ -7,8 +7,6 @@ class MessageDefault(
     private val message: Array<Any>? = null,
     private val context: Map<String, Any>? = null
 ) : Message, Serializable {
-
-
     companion object {
         private const val serialVersionUID = 1L
     }

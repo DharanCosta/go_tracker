@@ -25,5 +25,4 @@ class TrainerPersistenceService(
 
     fun findByEmail(email: String): Optional<Trainer>  =
         trainerRepository.findByEmail(email).map(ToTrainer::map)
-
 }

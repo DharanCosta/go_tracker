@@ -40,5 +40,4 @@ class TrainerResourceTest {
 
         assertEquals(trainerCreateRequest.ign, response.body?.trainer)
     }
-
 }

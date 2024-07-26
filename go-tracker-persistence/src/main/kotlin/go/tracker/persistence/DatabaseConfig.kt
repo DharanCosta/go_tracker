@@ -49,5 +49,4 @@ class DatabaseConfig {
     fun goTrackerTransactionManager(
         @Qualifier("goTrackerEntityManager") entityManagerFactory: EntityManagerFactory?
     ): PlatformTransactionManager = JpaTransactionManager(entityManagerFactory!!)
-
 }

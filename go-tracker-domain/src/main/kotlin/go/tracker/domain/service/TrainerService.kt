@@ -11,5 +11,4 @@ class TrainerService(
     fun create(trainer: Trainer): Trainer {
         return trainerPersistenceService.createTrainer(trainer)
     }
-
 }

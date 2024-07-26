@@ -2,7 +2,6 @@ package go.tracker.api.config
 
 import go.tracker.domain.common.MessageCode
 import go.tracker.models.exceptions.UniqueFieldViolationException
-import jakarta.validation.ConstraintViolationException
 import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,19 +10,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.util.*
-import java.util.Locale.getDefault
 
 @ControllerAdvice
 class GlobalExceptionHandler(
     private val source: MessageSource
 ) {
-
-//    @ExceptionHandler(NotFoundException::class)
-//    fun handleNotFoundException(ex: NotFoundException): ResponseEntity<ApiResponse> {
-//        val response = ApiResponse(MessageCode.REQUIRED_FIELD, ex.message ?: "Not Found")
-//        return ResponseEntity(response, HttpStatus.NOT_FOUND)
-//    }
-
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleConstraintViolationException(ex: MethodArgumentNotValidException) =
         ResponseEntity(
@@ -49,5 +40,4 @@ class GlobalExceptionHandler(
     private fun map(code: String, args: Array<String>?) = setOf(
         code, source.getMessage(code, args, Locale.getDefault())
     )
-
 }
