@@ -1,4 +1,4 @@
-package go.tracker.persistence.entity
+package go.tracker.persistence.entity.user
 
 import jakarta.persistence.*
 
@@ -21,4 +21,8 @@ class AddressEntity {
 
     @Column(name = "COORDINATES", columnDefinition = "VARCHAR2(20)", nullable = false)
     var coordinates: String = ""
+
+    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "IDT_USER", nullable = false, referencedColumnName = "IDT_USER")
+    var user: AppUserEntity? = null
 }

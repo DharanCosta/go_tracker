@@ -19,6 +19,7 @@ dependencies {
 
     //Utils
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.springframework:spring-context:6.1.6")
 
     //Test
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
