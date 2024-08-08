@@ -1,4 +1,4 @@
-package go.tracker.api.request
+package go.tracker.api.request.trainer
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank

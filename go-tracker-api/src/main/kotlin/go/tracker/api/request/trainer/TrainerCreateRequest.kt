@@ -1,4 +1,4 @@
-package go.tracker.api.request
+package go.tracker.api.request.trainer
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty

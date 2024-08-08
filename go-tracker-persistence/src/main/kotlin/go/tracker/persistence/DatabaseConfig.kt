@@ -26,10 +26,6 @@ import javax.sql.DataSource
 @PropertySource(value = ["classpath:application-database-local.properties"])
 class DatabaseConfig {
 
-    private val url = "jdbc:postgresql://localhost:5432/GOTrackerDB\n"
-    private val user = "postgres"
-    private val password = "Dcosta55"
-
     @Bean
     @Primary
     @ConfigurationProperties(prefix = "go.tracker.datasource")

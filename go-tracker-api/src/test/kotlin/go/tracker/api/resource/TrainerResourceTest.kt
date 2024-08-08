@@ -1,6 +1,6 @@
 package go.tracker.api.resource
 
-import go.tracker.api.request.TrainerCreateRequest
+import go.tracker.api.request.trainer.TrainerCreateRequest
 import go.tracker.domain.service.TrainerService
 import go.tracker.models.user.Trainer
 import io.mockk.every
