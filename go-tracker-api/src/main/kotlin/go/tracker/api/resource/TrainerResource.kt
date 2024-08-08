@@ -1,6 +1,6 @@
 package go.tracker.api.resource
 
-import go.tracker.api.request.TrainerCreateRequest
+import go.tracker.api.request.trainer.TrainerCreateRequest
 import go.tracker.api.response.CreatedTrainerResponse
 import go.tracker.api.swagger.CreateTrainerSwaggerAPI
 import go.tracker.domain.service.TrainerService
@@ -23,7 +23,7 @@ class TrainerResource(
 ) {
     companion object {
         const val RESOURCE_PATH = "/trainers"
-        const val TAG = "User Service"
+        const val TAG = "Trainer Service"
     }
 
     @CreateTrainerSwaggerAPI
@@ -33,9 +33,9 @@ class TrainerResource(
         @Schema(anyOf = [TrainerCreateRequest::class])
         trainerCreateRequest: TrainerCreateRequest
     ): ResponseEntity<CreatedTrainerResponse> {
-
         val response = CreatedTrainerResponse().toResponse(
-            trainerService.create(trainerCreateRequest.toDomain(trainerCreateRequest)))
+            trainerService.create(trainerCreateRequest.toDomain(trainerCreateRequest))
+        )
 
         return ResponseEntity(response, HttpStatus.CREATED)
     }
