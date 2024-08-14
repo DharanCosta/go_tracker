@@ -1,11 +1,13 @@
-package go.tracker.api.config.jwt
+package go.tracker.domain.config
 
 import go.tracker.models.user.UserLogin
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetailsImpl(private val user: UserLogin) : UserDetails {
-    override fun getAuthorities() = mutableListOf<GrantedAuthority>()
+    override fun getAuthorities() : Collection<GrantedAuthority> =
+        user.role.map {SimpleGrantedAuthority(it) }
 
     override fun isEnabled() = true
 

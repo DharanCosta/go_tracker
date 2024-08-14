@@ -1,5 +1,6 @@
 package go.tracker.persistence.entity.user
 
+import go.tracker.models.enums.UserType
 import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -27,6 +28,9 @@ class AppUserEntity(
 
     @Column(name = "BIRTH_DATE", columnDefinition = "DATE", nullable = false)
     var birthDate: LocalDate? = LocalDate.now()
+
+    @Column(name = "ROLE", columnDefinition = "VARCHAR(10)", nullable = false)
+    var type: UserType? = null
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL])
     var address: AddressEntity? = null

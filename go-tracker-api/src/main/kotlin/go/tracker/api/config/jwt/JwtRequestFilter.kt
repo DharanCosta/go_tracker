@@ -1,11 +1,12 @@
 package go.tracker.api.config.jwt
 
+import go.tracker.domain.config.JwtUtil
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
@@ -16,9 +17,10 @@ import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
 @Component
-class JwtRequestFilter @Autowired constructor(
+class JwtRequestFilter (
     private val jwtTokenUtil: JwtUtil,
-    private val userDetailsService: UserDetailsService
+    @Lazy private val userDetailsService: UserDetailsService
+
 ) : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)

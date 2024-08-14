@@ -1,4 +1,4 @@
-package go.tracker.api.config.jwt
+package go.tracker.domain.config
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -26,7 +26,8 @@ class JwtUtil {
     // Generate token for user
     fun generateToken(userDetails: UserDetails): String {
         val claims = HashMap<String, Any>()
-        claims["role"] = userDetails.authorities.map { it.authority }
+        claims["roles"] = userDetails.authorities.map { it.authority }
+//        claims["role"] = userDetails.authorities.map { it.authority }
         return doGenerateToken(claims, userDetails.username)
     }
 
@@ -49,6 +50,14 @@ class JwtUtil {
     // Retrieve username from JWT token
     fun getUsernameFromToken(token: String): String {
         return getClaimFromToken(token, Claims::getSubject)
+    }
+
+    fun getRolesFromToken(token: String): List<String> {
+        val claims = Jwts.parser()
+            .setSigningKey(secret)
+            .parseClaimsJws(token)
+            .body
+        return claims["roles"] as List<String>
     }
 
     // Retrieve expiration date from JWT token

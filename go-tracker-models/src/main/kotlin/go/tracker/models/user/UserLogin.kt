@@ -6,5 +6,5 @@ class UserLogin (
     var email: String? = "",
     var password: String ?= "",
     var token: String ? = "",
-    var role: String? = "ROLE_USER"
+    var role: List<String> = listOf("USER")
 )

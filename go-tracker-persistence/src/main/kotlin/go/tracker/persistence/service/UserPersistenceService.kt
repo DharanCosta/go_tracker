@@ -1,7 +1,7 @@
 package go.tracker.persistence.service
 
 import go.tracker.persistence.entity.user.AppUserEntity
-import go.tracker.persistence.repository.UserRepository
+import go.tracker.persistence.repository.user.UserRepository
 import org.springframework.stereotype.Service
 import java.util.Optional
 

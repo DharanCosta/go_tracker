@@ -1,42 +1,60 @@
 package go.tracker.api.resource
 
-import go.tracker.api.config.jwt.JwtUtil
-import go.tracker.api.config.jwt.UserDetailsImpl
 import go.tracker.api.request.login.UserLoginRequest
+import go.tracker.api.request.trainer.TrainerCreateRequest
+import go.tracker.api.response.CreatedTrainerResponse
 import go.tracker.api.response.login.UserLoginResponse
-import go.tracker.domain.service.UserService
+import go.tracker.api.swagger.LoginTrainerSwaggerAPI
+import go.tracker.api.swagger.SignUpTrainerSwaggerAPI
+import go.tracker.domain.config.CustomUserDetailsService
+import go.tracker.domain.service.TrainerService
 import go.tracker.models.exceptions.InvalidUsernamePasswordException
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.web.bind.annotation.*
-import kotlin.jvm.optionals.getOrElse
 
 @Tag(name = UserResource.TAG, description = "Serviço de criação, pesquisa e atualização de usuários")
 @RequestMapping(UserResource.RESOURCE_PATH)
 @RestController
 class UserResource(
-    private val userService: UserService,
-    private val jwtUtil: JwtUtil,
-) : UserDetailsService {
+    private val trainerService: TrainerService,
+    private val userDetailsService: CustomUserDetailsService
+) {
 
     companion object {
         const val RESOURCE_PATH = "/user"
         const val TAG = "User Service"
     }
 
+    @LoginTrainerSwaggerAPI
     @PostMapping("/login", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun login(@RequestBody loginRequest: UserLoginRequest): ResponseEntity<UserLoginResponse> {
         return try {
-            val userDetails: UserDetails = this.loadUserByUsername(loginRequest.username)
-            val jwt = jwtUtil.generateToken(userDetails)
-            ResponseEntity.ok(UserLoginResponse(token = jwt))
+            ResponseEntity.ok(UserLoginResponse(token = userDetailsService.getToken(loginRequest.username)))
         } catch (e: InvalidUsernamePasswordException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
         }
+    }
+
+    @SignUpTrainerSwaggerAPI
+    @PostMapping("/signup",produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun create(
+        @RequestBody @Valid
+        @Schema(anyOf = [TrainerCreateRequest::class])
+        trainerCreateRequest: TrainerCreateRequest
+    ): ResponseEntity<CreatedTrainerResponse> {
+        val response = CreatedTrainerResponse().toResponse(
+            trainerService.createTrainer(trainerCreateRequest.toDomain(trainerCreateRequest)).also{
+                userDetailsService.createUser(it.email!!, it.password!!, listOf(it.type.toString()))
+            },
+            userDetailsService.getToken(trainerCreateRequest.email)
+        )
+
+        return ResponseEntity(response, HttpStatus.CREATED)
     }
 
     @GetMapping("/admin")
@@ -59,9 +77,5 @@ class UserResource(
         return "I am deleting " + s;
     }
 
-    override fun loadUserByUsername(username: String?): UserDetails {
-        val userLogin =
-            userService.getUserLogin(username!!)!!.getOrElse { throw InvalidUsernamePasswordException(username) }
-        return UserDetailsImpl(userLogin)
-    }
+
 }

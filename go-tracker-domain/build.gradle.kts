@@ -16,6 +16,16 @@ dependencies {
     implementation(project(":go-tracker-models"))
     implementation(project(":go-tracker-commons"))
 
+    // Spring Security
+    implementation("org.springframework.security:spring-security-core")
+    implementation("org.springframework.security:spring-security-web")
+    implementation("org.springframework.security:spring-security-config")
+    implementation("org.springframework.security:spring-security-crypto")
+
+    // JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2") // Updated implementation
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2") // Jackson serializer
 
     //Utils
     implementation("org.apache.commons:commons-lang3:3.12.0")
