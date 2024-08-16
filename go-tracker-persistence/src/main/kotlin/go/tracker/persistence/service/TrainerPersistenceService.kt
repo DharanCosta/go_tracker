@@ -2,6 +2,7 @@ package go.tracker.persistence.service
 
 import go.tracker.models.trainer.Trainer
 import go.tracker.models.trainer.TrainerStatus
+import go.tracker.persistence.entity.trainer.TrainerStatusEntity
 import go.tracker.persistence.mapper.ToTrainerStatusToEntity
 import go.tracker.persistence.mapper.to.entity.ToTrainerEntityMapper
 import go.tracker.persistence.mapper.to.model.ToTrainer
@@ -29,6 +30,9 @@ class TrainerPersistenceService(
 
     fun findByEmail(email: String): Optional<Trainer>  =
         trainerRepository.findByEmail(email).map(ToTrainer::map)
+
+    fun findLastTrainerStatus(id: Long): TrainerStatusEntity? =
+        trainerStatusRepository.findTopByTrainerIdOrderByEntryDateDesc(id)
 
     fun createTrainerStatusEntry(trainerStatus: TrainerStatus) {
          trainerStatus.username?.let {

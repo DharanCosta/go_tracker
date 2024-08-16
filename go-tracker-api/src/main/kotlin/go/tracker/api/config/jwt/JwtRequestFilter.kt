@@ -1,5 +1,6 @@
 package go.tracker.api.config.jwt
 
+import go.tracker.domain.config.CustomUserDetailsService
 import go.tracker.domain.config.JwtUtil
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
@@ -19,7 +20,8 @@ import java.io.IOException
 @Component
 class JwtRequestFilter (
     private val jwtTokenUtil: JwtUtil,
-    @Lazy private val userDetailsService: UserDetailsService
+    @Lazy private val userDetailsService: UserDetailsService,
+    private val customUserDetailsService: CustomUserDetailsService
 
 ) : OncePerRequestFilter() {
 
@@ -46,7 +48,7 @@ class JwtRequestFilter (
 
         // Once we get the token, validate it.
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails: UserDetails = this.userDetailsService.loadUserByUsername(username)
+            val userDetails: UserDetails = this.customUserDetailsService.loadUserByUsername(username)
 
             // If the token is valid, configure Spring Security to manually set authentication
             if (jwtTokenUtil.validateToken(jwtToken!!, userDetails)) {

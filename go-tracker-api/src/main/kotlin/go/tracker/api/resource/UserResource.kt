@@ -48,9 +48,7 @@ class UserResource(
         trainerCreateRequest: TrainerCreateRequest
     ): ResponseEntity<CreatedTrainerResponse> {
         val response = CreatedTrainerResponse().toResponse(
-            trainerService.createTrainer(trainerCreateRequest.toDomain(trainerCreateRequest)).also{
-                userDetailsService.createUser(it.email!!, it.password!!, listOf(it.type.toString()))
-            },
+            trainerService.createTrainer(trainerCreateRequest.toDomain(trainerCreateRequest)),
             userDetailsService.getToken(trainerCreateRequest.email)
         )
 
@@ -61,21 +59,4 @@ class UserResource(
     fun adminEndpoint(): String {
         return "Admin!";
     }
-
-    @GetMapping("/{trainer}")
-    fun userEndpoint(): String {
-        return "User!";
-    }
-
-    @GetMapping("/all")
-    fun allRolesEndpoint(): String {
-        return "All Roles!";
-    }
-
-    @DeleteMapping("/delete")
-    fun deleteEndpoint(@RequestBody s: String): String {
-        return "I am deleting " + s;
-    }
-
-
 }

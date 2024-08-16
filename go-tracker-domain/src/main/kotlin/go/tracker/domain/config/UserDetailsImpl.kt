@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetailsImpl(private val user: UserLogin) : UserDetails {
     override fun getAuthorities() : Collection<GrantedAuthority> =
-        user.role.map {SimpleGrantedAuthority(it) }
+        user.role.map {SimpleGrantedAuthority("ROLE_$it") }
 
     override fun isEnabled() = true
 
