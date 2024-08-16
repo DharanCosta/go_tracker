@@ -1,19 +1,16 @@
 package go.tracker.domain.service
 
-import go.tracker.models.exceptions.InvalidUsernamePasswordException
 import go.tracker.models.user.UserLogin
 import go.tracker.persistence.service.UserPersistenceService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.Optional
-import kotlin.jvm.Throws
+import java.util.*
 
 @Service
 class UserService(
     private val userPersistenceService: UserPersistenceService,
     private val passwordEncoder: PasswordEncoder
 ) {
-    @Throws(InvalidUsernamePasswordException::class)
     fun getUserLogin(username: String):Optional<UserLogin>? {
         var response: Optional<UserLogin>? = Optional.empty()
             userPersistenceService.findByEmail(username).ifPresent { user ->

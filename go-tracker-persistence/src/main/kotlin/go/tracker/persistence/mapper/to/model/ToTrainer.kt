@@ -1,8 +1,8 @@
 package go.tracker.persistence.mapper.to.model
 
 import brave.internal.collect.UnsafeArrayMap.Mapper
-import go.tracker.models.user.Trainer
-import go.tracker.persistence.entity.user.TrainerEntity
+import go.tracker.models.trainer.Trainer
+import go.tracker.persistence.entity.trainer.TrainerEntity
 
 val ToTrainer =
     Mapper<TrainerEntity, Trainer> { trainerEntity ->

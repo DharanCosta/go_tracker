@@ -1,6 +1,7 @@
 package go.tracker.api.config
 
 import go.tracker.domain.common.MessageCode
+import go.tracker.models.exceptions.InvalidTrainerStatusException
 import go.tracker.models.exceptions.UniqueFieldViolationException
 import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
@@ -34,6 +35,12 @@ class GlobalExceptionHandler(
     @ExceptionHandler(UniqueFieldViolationException::class)
     fun handleUniqueFieldViolationException(ex: UniqueFieldViolationException): ResponseEntity<ApiResponse> {
         val response = ApiResponse().fromSet(map(MessageCode.UNIQUE_FIELD_VIOLATION, arrayOf(ex.field)))
+        return ResponseEntity(response, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(InvalidTrainerStatusException::class)
+    fun handleInvalidTrainerStatusException(ex: InvalidTrainerStatusException): ResponseEntity<ApiResponse> {
+        val response = ApiResponse().fromSet(setOf(MessageCode.INVALID_TRAINER_STATUS, ex.field))
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
     }
 

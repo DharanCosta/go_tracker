@@ -2,6 +2,7 @@ package go.tracker.models.user
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import go.tracker.models.enums.UserType
+import go.tracker.models.trainer.Trainer
 import java.time.LocalDate
 
 
@@ -15,7 +16,7 @@ abstract class User {
     var birthDate: LocalDate? = LocalDate.now()
     var address: Address? = null
     var phone: Phone? = null
-    var type: UserType? = UserType.TRAINER
+    var type: UserType? = UserType.USER
 
     abstract fun isTrainer(): Boolean
 }

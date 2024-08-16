@@ -1,5 +1,6 @@
-package go.tracker.models.user
+package go.tracker.models.trainer
 
+import go.tracker.models.user.User
 import java.time.LocalDate
 
 data class Trainer (

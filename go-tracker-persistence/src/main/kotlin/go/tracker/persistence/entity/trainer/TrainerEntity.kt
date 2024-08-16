@@ -1,7 +1,11 @@
-package go.tracker.persistence.entity.user
+package go.tracker.persistence.entity.trainer
 
+import go.tracker.persistence.entity.user.AppUserEntity
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.OneToMany
 import jakarta.persistence.PrimaryKeyJoinColumn
 import jakarta.persistence.Table
 import java.time.LocalDate
@@ -33,7 +37,10 @@ class TrainerEntity(
     var initialCatch: Long? = null
 
     @Column(name= "PUBLIC", columnDefinition = "BOOLEAN", nullable = false)
-    var public: Boolean? = false
+    var public: Boolean? = null
+
+    @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var status: MutableList<TrainerStatusEntity>? = mutableListOf()
 
 //    @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 //    var goals: MutableList<GoalsEntity>? = mutableListOf()

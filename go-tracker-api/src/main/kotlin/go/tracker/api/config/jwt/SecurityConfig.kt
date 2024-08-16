@@ -1,8 +1,8 @@
 package go.tracker.api.config.jwt
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
@@ -15,14 +15,14 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig() {
-
-    @Autowired
-    private lateinit var jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint
-
+class SecurityConfig(
+    @Lazy private val jwtRequestFilter: JwtRequestFilter,
+    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint
+) {
     @Bean
     fun passwordEncoder(): BCryptPasswordEncoder {
         return BCryptPasswordEncoder()
@@ -52,11 +52,10 @@ class SecurityConfig() {
         http.csrf { csrf -> csrf.disable() }
             .authorizeHttpRequests { authorize ->
                 authorize
-                    .requestMatchers("/user/login/**", "/trainers/**", "/v3/api-docs/**", "/swagger-ui.html",
+                    .requestMatchers("/user/**", "/v3/api-docs/**", "/swagger-ui.html",
                         "/swagger-ui/**").permitAll()
+                    .requestMatchers("/trainer/**").hasRole("USER")
                     .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                    .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                    .requestMatchers("/trainer/**").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
             }
             .exceptionHandling { exception ->
@@ -65,6 +64,8 @@ class SecurityConfig() {
             .sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
+
 
         return http.build()
     }

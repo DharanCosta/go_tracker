@@ -1,6 +1,6 @@
-package go.tracker.persistence.repository
+package go.tracker.persistence.repository.trainer
 
-import go.tracker.persistence.entity.user.TrainerEntity
+import go.tracker.persistence.entity.trainer.TrainerEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.Optional

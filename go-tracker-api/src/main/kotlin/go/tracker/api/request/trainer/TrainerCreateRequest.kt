@@ -7,7 +7,7 @@ import go.tracker.api.common.validation.constraint.annotation.ValidName
 import go.tracker.domain.common.MessageCode
 import go.tracker.models.user.Address
 import go.tracker.models.user.Phone
-import go.tracker.models.user.Trainer
+import go.tracker.models.trainer.Trainer
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank

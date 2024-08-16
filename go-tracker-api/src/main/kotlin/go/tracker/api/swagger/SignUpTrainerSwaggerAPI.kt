@@ -33,4 +33,4 @@ import org.springdoc.api.ErrorMessage
 )
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CreateTrainerSwaggerAPI
+annotation class SignUpTrainerSwaggerAPI

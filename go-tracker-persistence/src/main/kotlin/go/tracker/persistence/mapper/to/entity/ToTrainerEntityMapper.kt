@@ -1,11 +1,11 @@
 package go.tracker.persistence.mapper.to.entity
 
 import go.tracker.commons.mapper.Mapper
-import go.tracker.models.user.Trainer
+import go.tracker.models.trainer.Trainer
 import go.tracker.models.user.User
 import go.tracker.persistence.entity.user.AddressEntity
 import go.tracker.persistence.entity.user.PhoneEntity
-import go.tracker.persistence.entity.user.TrainerEntity
+import go.tracker.persistence.entity.trainer.TrainerEntity
 
 val ToTrainerEntityMapper =
     Mapper<User, TrainerEntity> { user ->
@@ -18,6 +18,7 @@ val ToTrainerEntityMapper =
                 initialXP = user.initialXP
                 initialCatch = user.initialXP
                 public = user.public
+                type = user.type
                 email = user.email
                 password = user.password
                 name = user.name

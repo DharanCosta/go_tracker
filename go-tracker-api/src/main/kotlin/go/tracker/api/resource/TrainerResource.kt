@@ -1,42 +1,59 @@
 package go.tracker.api.resource
 
-import go.tracker.api.request.trainer.TrainerCreateRequest
-import go.tracker.api.response.CreatedTrainerResponse
-import go.tracker.api.swagger.CreateTrainerSwaggerAPI
+import go.tracker.api.request.TrainerStatusRequest
+import go.tracker.api.response.TrainerProfileResponse
+import go.tracker.api.swagger.CreateTrainerStatusSwaggerAPI
+import go.tracker.api.swagger.TrainerProfileSwaggerAPI
 import go.tracker.domain.service.TrainerService
-import io.swagger.v3.oas.annotations.media.Schema
+import go.tracker.models.exceptions.InvalidCredentialsException
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.web.bind.annotation.*
 
-@Tag(name = TrainerResource.TAG, description = "Serviço de criação, pesquisa e atualização de usuários")
+@Tag(name = TrainerResource.TAG, description = "Serviço de pesquisa e atualização de usuários")
 @RequestMapping(TrainerResource.RESOURCE_PATH)
 @RestController
 class TrainerResource(
     private val trainerService: TrainerService,
 ) {
     companion object {
-        const val RESOURCE_PATH = "/trainers"
+        const val RESOURCE_PATH = "/trainer"
         const val TAG = "Trainer Service"
     }
 
-    @CreateTrainerSwaggerAPI
-    @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(
-        @RequestBody @Valid
-        @Schema(anyOf = [TrainerCreateRequest::class])
-        trainerCreateRequest: TrainerCreateRequest
-    ): ResponseEntity<CreatedTrainerResponse> {
-        val response = CreatedTrainerResponse().toResponse(
-            trainerService.create(trainerCreateRequest.toDomain(trainerCreateRequest))
-        )
+    @TrainerProfileSwaggerAPI
+    @GetMapping("/{ign}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTrainerProfile(@PathVariable ign: String): ResponseEntity<TrainerProfileResponse> =
+        ResponseEntity.ok(TrainerProfileResponse().toResponse(trainerService.findTrainer(ign)))
 
-        return ResponseEntity(response, HttpStatus.CREATED)
+
+    @CreateTrainerStatusSwaggerAPI
+    @PostMapping("/status")
+    fun updateTrainerStatus(@RequestBody trainerStatusRequest: TrainerStatusRequest) : ResponseEntity<Unit>{
+        val username = getAuthenticatedUsername()
+
+        return  if (username != null) {
+            trainerService.createStatusEntry(trainerStatusRequest.toDomain(trainerStatusRequest, username))
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.noContent().build()
+        }
     }
+
+    @Throws(InvalidCredentialsException::class)
+    fun getAuthenticatedUsername(): String? {
+        val authentication = SecurityContextHolder.getContext().authentication
+
+        // If authentication exists, get the user details
+        return if (authentication != null && authentication.principal is UserDetails) {
+            val userDetails = authentication.principal as UserDetails
+            userDetails.username
+        } else {
+            throw InvalidCredentialsException()
+        }
+    }
+
 }

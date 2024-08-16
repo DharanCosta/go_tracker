@@ -1,4 +1,4 @@
-package go.tracker.persistence.repository
+package go.tracker.persistence.repository.user
 
 import go.tracker.persistence.entity.user.PhoneEntity
 import org.springframework.data.jpa.repository.JpaRepository
