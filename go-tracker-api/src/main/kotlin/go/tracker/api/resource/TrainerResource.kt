@@ -1,7 +1,9 @@
 package go.tracker.api.resource
 
-import go.tracker.api.request.TrainerStatusRequest
+import go.tracker.api.request.trainer.TrainerStatusRequest
+import go.tracker.api.request.trainer.MedalsRequest
 import go.tracker.api.response.TrainerProfileResponse
+import go.tracker.api.swagger.CreateTrainerMedalStatusSwaggerAPI
 import go.tracker.api.swagger.CreateTrainerStatusSwaggerAPI
 import go.tracker.api.swagger.TrainerProfileSwaggerAPI
 import go.tracker.domain.service.TrainerService
@@ -43,11 +45,23 @@ class TrainerResource(
         }
     }
 
+    @CreateTrainerMedalStatusSwaggerAPI
+    @PostMapping("/medal")
+    fun updateTrainerStatus(@RequestBody medalsRequest: MedalsRequest) : ResponseEntity<Unit>{
+        val username = getAuthenticatedUsername()
+
+        return  if (username != null) {
+            trainerService.createMedalStatusEntry(medalsRequest.toDomainList(medalsRequest), username)
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
     @Throws(InvalidCredentialsException::class)
     fun getAuthenticatedUsername(): String? {
         val authentication = SecurityContextHolder.getContext().authentication
 
-        // If authentication exists, get the user details
         return if (authentication != null && authentication.principal is UserDetails) {
             val userDetails = authentication.principal as UserDetails
             userDetails.username
@@ -55,5 +69,4 @@ class TrainerResource(
             throw InvalidCredentialsException()
         }
     }
-
 }

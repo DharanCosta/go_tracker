@@ -1,12 +1,12 @@
-package enums
+package go.tracker.models.enums
 
 enum class Medals(
-    name: String,
-    finite: Boolean,
-    bronze: Int,
-    silver: Int,
-    gold: Int,
-    platinum: Int,
+    val medalName: String,
+    val finite: Boolean,
+    val bronze: Long,
+    val silver: Long,
+    val gold: Long,
+    val platinum: Long,
 ) {
     KANTO                   ("Kanto"    ,true , 20,	50,   100,	151),
     JOHTO                   ("Johto"    ,true , 5,	30,	70,	100),
@@ -17,6 +17,8 @@ enum class Medals(
     ALOLA                   ("Alola"    ,true , 5,	25,	50,	86),
     GALAR                   ("Galar"    ,true , 5,	25,	50,	89),
     HISUI                   ("Hisui"    ,true , 1,	3,	5,	    7 ),
+    PALDEA                   ("Paldea"  ,true , 5,	30,	80,  103),
+
     JOGGER                  ("Jogger"   ,false, 10,	100,	1000,	10000),
     COLLECTOR               ("Collector",false, 30,	500,	2000,	50000),
     SCIENTIST               ("Scientist",false, 3,	20,	200,	2000),
@@ -35,7 +37,6 @@ enum class Medals(
     ACE_TRAINER             ("Ace Trainer", false, 10,	100,	1000,	2000),
     YOUNGSTER               ("Youngster", false, 3,	50,	300,	1000),
     PIKACHU_FAN             ("Pikachu Fan", false, 3,50,	300,	1000),
-    UNOWN                   ("Unown", true, 3,	10,	26,	28),
     GREAT_LEAGUE_VETERAN    ("Great League Veteran", false, 5,	50,	200,	1000),
     ULTRA_LEAGUE_VETERAN    ("Ultra League Veteran", false, 5,	50,	200,	1000),
     MASTER_LEAGUE_VETERAN   ("Master League Veteran", false, 5,	50,	200,	1000),
@@ -43,7 +44,6 @@ enum class Medals(
     HERO                    ("Hero", false, 10, 	100,	1000,	2000),
     ULTRA_HERO              ("Ultra Hero", false, 1,	5,	20,	50),
     PURIFIER                ("Purifier", false, 1,	50,	500,	1000),
-    MEGA_EVOLUTION_GURU     ("Mega Evolution Guru", true, 1,24,	36,	46),
     SUCCESSOR                ("Successor", false, 1,	50,	500,	1000),
     RISING_STAR             ("Rising Star", false, 2,	10,	50,	150),
     RISING_STAR_DUO         ("Rising Star Duo", false,10,	100,	1000,	2000),
@@ -51,6 +51,17 @@ enum class Medals(
     TINY_POKEMON_COLLECTOR  ("Tiny Pokémon Collector", false,5,	25,	100,	500),
     JUMBO_POKEMON_COLLECTOR ("Jumbo Pokémon Collector", false, 5,	25,	100,	500),
     PICNICKER               ("Picnicker", false, 5, 	25, 	5500,	2500),
+    FRIEND_FINDER           ("Friend Finder", false, 1,10,20,50),
+    SHOWCASE                ("Showcase Star", false, 1,10,50,100),
+    ROUTES                  ("Expert Navigator", false, 10, 50,200,600),
+    WAYFARER                ("Wayfarer", false, 50, 500,1000,1500),
+    ELITE_COLLECTOR         ("Elite Collector", false, 0,0,0,0),
+    EVENTS                  ("Events", false, 0,0,0,0),
+
+    UNOWN                   ("Unown", true, 3,	10,	26,	28),
+    MEGA_EVOLUTION_GURU     ("Mega Evolution Guru", true, 1,24,	36,	46),
+    VIVILLON                ("Vivillon Collector", true, 0,0,0,18),
+
     SCHOOLKID               ("SchoolKid", false, 10,	50,	200, 0),
     BLACK_BELT              ("Black Belt", false, 10,	50,	200,0),
     BIRD_KEEPER             ("Bird Keeper",false, 10,50,	200,0),
@@ -68,5 +79,14 @@ enum class Medals(
     SKIER                   ("Skier", false,  10,	50,	200, 0),
     DRAGON_TAMER           ("Dragon Tamer", false,  10,	50,	200, 0),
     DELINQUENT              ("Delinquent", false,  10,	50,	200, 0),
-    FAIRY_TALE_GIRL         ("Fairy Tale Girl", false,  10,	50,	200, 0)
+    FAIRY_TALE_GIRL         ("Fairy Tale Girl", false,  10,	50,	200, 0);
+
+    fun getMedalLimit(medal: Medals): Long {
+        val limit: Long
+        if(isFinite(medal) && medal.platinum > 0) limit = medal.platinum  else limit = medal.gold
+        return limit
+    }
+
+    fun isFinite(medal: Medals) = medal.finite
+
 }

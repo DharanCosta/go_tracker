@@ -1,4 +1,4 @@
-package go.tracker.persistence.mapper
+package go.tracker.persistence.mapper.to.entity
 
 import brave.internal.collect.UnsafeArrayMap.Mapper
 import go.tracker.models.trainer.TrainerStatus
@@ -13,5 +13,4 @@ val ToTrainerStatusToEntity  =
            catches = status.catches
            entryDate = LocalDateTime.now()
        }
-
 }
