@@ -42,6 +42,9 @@ class TrainerEntity(
     @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var status: MutableList<TrainerStatusEntity>? = mutableListOf()
 
+    @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var medals: MutableList<MedalStatusEntity>? = mutableListOf()
+
 //    @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 //    var goals: MutableList<GoalsEntity>? = mutableListOf()
 }

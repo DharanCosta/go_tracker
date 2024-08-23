@@ -12,7 +12,7 @@ import org.springdoc.api.ErrorMessage
     value = [
         ApiResponse(
             responseCode = "200",
-            description = "Status cadastrado",
+            description = "Status de medalha cadastrado",
             content = [
                 Content(
                     mediaType = "application/json"
@@ -21,7 +21,7 @@ import org.springdoc.api.ErrorMessage
         ),
         ApiResponse(
             responseCode = "204",
-            description = "Status não cadastrado",
+            description = "Status de medalha não cadastrado",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -31,7 +31,7 @@ import org.springdoc.api.ErrorMessage
         ),
         ApiResponse(
             responseCode = "400",
-            description = "Status inválidos",
+            description = "Status de medalha inválidos",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -53,4 +53,4 @@ import org.springdoc.api.ErrorMessage
 )
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CreateTrainerStatusSwaggerAPI
+annotation class CreateTrainerMedalStatusSwaggerAPI

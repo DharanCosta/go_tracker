@@ -1,4 +1,4 @@
-package go.tracker.api.config
+package go.tracker.api.config.message
 
 import java.io.Serializable
 
@@ -16,7 +16,7 @@ class MessageDefault(
     }
 
     override fun getMessage(): Array<Any>? {
-       return message
+        return message
     }
 
     override fun getContext(): Map<String, Any>? {

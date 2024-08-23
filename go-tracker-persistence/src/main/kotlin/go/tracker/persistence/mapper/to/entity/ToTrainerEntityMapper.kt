@@ -12,6 +12,7 @@ val ToTrainerEntityMapper =
         when (user) {
             is Trainer -> TrainerEntity().apply {
                 val trainerEntity = this
+                id = user.id
                 ign = user.ign
                 level = user.level
                 startDate = user.startDate

@@ -1,4 +1,4 @@
-package go.tracker.api.config
+package go.tracker.api.config.message
 
 import java.io.Serializable
 
