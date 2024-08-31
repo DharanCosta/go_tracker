@@ -2,9 +2,7 @@ package go.tracker.api.config
 
 import go.tracker.api.config.message.MessageDefault
 import go.tracker.domain.common.MessageCode
-import go.tracker.models.exceptions.InvalidMedalStatusException
-import go.tracker.models.exceptions.InvalidTrainerStatusException
-import go.tracker.models.exceptions.UniqueFieldViolationException
+import go.tracker.models.exceptions.*
 import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -56,6 +54,18 @@ class GlobalExceptionHandler(
     fun handleInvalidMedalStatusException(ex: InvalidMedalStatusException): ResponseEntity<ApiResponse> {
         val response = ApiResponse().fromSet(setOf(MessageCode.INVALID_MEDAL_STATUS, ex.message.toString()))
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(TrainerNotFoundException::class)
+    fun handleTrainerNotFoundException(ex: TrainerNotFoundException): ResponseEntity<ApiResponse> {
+        val response = ApiResponse().fromSet(setOf(MessageCode.TRAINER_NOT_FOUND, ex.message.toString()))
+        return ResponseEntity(response, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(MedalStatusNotFoundException::class)
+    fun handleTrainerMedalStatusNotFoundException(ex: MedalStatusNotFoundException): ResponseEntity<ApiResponse> {
+        val response = ApiResponse().fromSet(setOf(MessageCode.TRAINER_MEDAL_STATUS_NOT_FOUND, ex.message.toString()))
+        return ResponseEntity(response, HttpStatus.NOT_FOUND)
     }
 
     private fun map(code: String, args: Array<String>?) = setOf(

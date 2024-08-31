@@ -1,6 +1,6 @@
 package go.tracker.api.swagger
 
-import go.tracker.api.response.CreatedTrainerResponse
+import go.tracker.api.response.medals.MedalStatusResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -8,20 +8,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springdoc.api.ErrorMessage
 
-@Operation(description = "Cria um treinador")
+@Operation(description = "Encontrara status de medalhas de treinador")
 @ApiResponses(value = [
         ApiResponse(
             responseCode = "201",
-            description = "Treinador criado com sucesso",
+            description = "Status de medalha encontrado",
             content = [
                 Content(
                     mediaType = "application/json",
-                    schema = Schema(implementation = CreatedTrainerResponse::class )
+                    schema = Schema(implementation = MedalStatusResponse::class )
                 )
         ]),
         ApiResponse(
             responseCode = "404",
-            description = "Informações inválidas para a criação de uma nova pessoa",
+            description = "Status de medalha não encontrado",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -33,4 +33,4 @@ import org.springdoc.api.ErrorMessage
 )
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class TrainerProfileSwaggerAPI
+annotation class FindTrainerLastMedalStatusSwaggerAPI

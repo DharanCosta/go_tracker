@@ -3,9 +3,11 @@ package go.tracker.api.resource
 import go.tracker.api.request.trainer.TrainerStatusRequest
 import go.tracker.api.request.trainer.MedalsRequest
 import go.tracker.api.response.TrainerProfileResponse
+import go.tracker.api.response.medals.MedalStatusResponse
 import go.tracker.api.swagger.CreateTrainerMedalStatusSwaggerAPI
 import go.tracker.api.swagger.CreateTrainerStatusSwaggerAPI
-import go.tracker.api.swagger.TrainerProfileSwaggerAPI
+import go.tracker.api.swagger.FindTrainerLastMedalStatusSwaggerAPI
+import go.tracker.api.swagger.FindTrainerProfileSwaggerAPI
 import go.tracker.domain.service.TrainerService
 import go.tracker.models.exceptions.InvalidCredentialsException
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -26,7 +28,7 @@ class TrainerResource(
         const val TAG = "Trainer Service"
     }
 
-    @TrainerProfileSwaggerAPI
+    @FindTrainerProfileSwaggerAPI
     @GetMapping("/{ign}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTrainerProfile(@PathVariable ign: String): ResponseEntity<TrainerProfileResponse> =
         ResponseEntity.ok(TrainerProfileResponse().toResponse(trainerService.findTrainer(ign)))
@@ -43,6 +45,15 @@ class TrainerResource(
         } else {
             ResponseEntity.noContent().build()
         }
+    }
+
+    @FindTrainerLastMedalStatusSwaggerAPI
+    @GetMapping("/medals", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getLastMedalStatus(): ResponseEntity<MedalStatusResponse> {
+        val username = getAuthenticatedUsername()
+
+       return ResponseEntity.ok(MedalStatusResponse().mapToMedalStatusResponse(
+           trainerService.findLastMedalStatus(username!!)))
     }
 
     @CreateTrainerMedalStatusSwaggerAPI

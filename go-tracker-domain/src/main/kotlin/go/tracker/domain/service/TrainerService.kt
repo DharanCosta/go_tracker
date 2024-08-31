@@ -3,13 +3,16 @@ package go.tracker.domain.service
 import go.tracker.models.enums.UserType
 import go.tracker.models.exceptions.InvalidMedalStatusException
 import go.tracker.models.exceptions.InvalidTrainerStatusException
+import go.tracker.models.exceptions.MedalStatusNotFoundException
 import go.tracker.models.exceptions.TrainerNotFoundException
 import go.tracker.models.trainer.Trainer
 import go.tracker.models.trainer.TrainerMedalStatus
 import go.tracker.models.trainer.TrainerStatus
+import go.tracker.models.trainer.medals.MedalsValues
 import go.tracker.persistence.service.TrainerPersistenceService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.*
 import kotlin.jvm.optionals.getOrElse
 
 @Service("TrainerService")
@@ -75,5 +78,15 @@ class TrainerService(
     private fun hasReachedMaxAllowed(medalStatus: TrainerMedalStatus): Boolean {
         val maxAllowed = medalStatus.medal!!.getMedalLimit(medalStatus.medal!!)
         return medalStatus.value?.compareTo(maxAllowed)!! == 1
+    }
+
+    @Throws(MedalStatusNotFoundException::class)
+    fun findLastMedalStatus(username: String): MedalsValues {
+        var medalsValues = Optional.of(MedalsValues())
+        trainerPersistenceService.findByEmail(username).ifPresent { trainer ->
+           medalsValues = Optional.of(MedalsValues().map(trainerPersistenceService.findLastMedalStatus(trainer.id!!)))
+        }
+        if (!medalsValues.isPresent) throw MedalStatusNotFoundException()
+        return medalsValues.get()
     }
 }
