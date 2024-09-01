@@ -68,4 +68,17 @@ class TrainerPersistenceService(
         }
         return medalStatus
     }
+
+    fun findLastMedalStatus(id: Long): MutableList<TrainerMedalStatus> {
+        val responseList: MutableList<TrainerMedalStatus> = mutableListOf()
+        val toList = Medals.entries.map { it.name }
+        medalStatusRepository.findLastMedalsEntriesForTrainer(toList, id).let { list ->
+            if (list!!.isNotEmpty()) {
+                list.forEach { medalStatus ->
+                    responseList.add(ToMedalStatusMapper.map(medalStatus!!))
+                }
+            }
+        }
+        return responseList
+    }
 }

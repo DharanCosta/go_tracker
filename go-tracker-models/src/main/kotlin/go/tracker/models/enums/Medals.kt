@@ -17,7 +17,7 @@ enum class Medals(
     ALOLA                   ("Alola"    ,true , 5,	25,	50,	86),
     GALAR                   ("Galar"    ,true , 5,	25,	50,	89),
     HISUI                   ("Hisui"    ,true , 1,	3,	5,	    7 ),
-    PALDEA                   ("Paldea"  ,true , 5,	30,	80,  103),
+    PALDEA                  ("Paldea"  ,true , 5,	30,	80,  103),
 
     JOGGER                  ("Jogger"   ,false, 10,	100,	1000,	10000),
     COLLECTOR               ("Collector",false, 30,	500,	2000,	50000),
