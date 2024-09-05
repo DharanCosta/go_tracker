@@ -6,6 +6,7 @@ import go.tracker.models.exceptions.InvalidTrainerStatusException
 import go.tracker.models.exceptions.MedalStatusNotFoundException
 import go.tracker.models.exceptions.TrainerNotFoundException
 import go.tracker.models.trainer.Trainer
+import go.tracker.models.trainer.TrainerGoal
 import go.tracker.models.trainer.TrainerMedalStatus
 import go.tracker.models.trainer.TrainerStatus
 import go.tracker.models.trainer.medals.MedalsValues
@@ -58,6 +59,16 @@ class TrainerService(
         return true
     }
 
+    @Throws(MedalStatusNotFoundException::class)
+    fun findLastMedalStatus(username: String): MedalsValues {
+        var medalsValues = Optional.of(MedalsValues())
+        trainerPersistenceService.findByEmail(username).ifPresent { trainer ->
+            medalsValues = Optional.of(MedalsValues().map(trainerPersistenceService.findLastMedalStatus(trainer.id!!)))
+        }
+        if (!medalsValues.isPresent) throw MedalStatusNotFoundException()
+        return medalsValues.get()
+    }
+
     @Throws(InvalidMedalStatusException::class)
     fun createMedalStatusEntry(medalStatusList: List<TrainerMedalStatus>, username: String): Boolean {
         trainerPersistenceService.findByEmail(username).map { trainer ->
@@ -80,13 +91,9 @@ class TrainerService(
         return medalStatus.value?.compareTo(maxAllowed)!! == 1
     }
 
-    @Throws(MedalStatusNotFoundException::class)
-    fun findLastMedalStatus(username: String): MedalsValues {
-        var medalsValues = Optional.of(MedalsValues())
-        trainerPersistenceService.findByEmail(username).ifPresent { trainer ->
-           medalsValues = Optional.of(MedalsValues().map(trainerPersistenceService.findLastMedalStatus(trainer.id!!)))
+    fun createTrainerGoal(trainerGoal: TrainerGoal, username: String) {
+        trainerPersistenceService.findByEmail(username).map { trainer ->
+            trainerPersistenceService.createTrainerGoal(trainerGoal, trainer)
         }
-        if (!medalsValues.isPresent) throw MedalStatusNotFoundException()
-        return medalsValues.get()
     }
 }

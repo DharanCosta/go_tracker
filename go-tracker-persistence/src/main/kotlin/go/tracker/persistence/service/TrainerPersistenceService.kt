@@ -2,15 +2,18 @@ package go.tracker.persistence.service
 
 import go.tracker.models.enums.Medals
 import go.tracker.models.trainer.Trainer
+import go.tracker.models.trainer.TrainerGoal
 import go.tracker.models.trainer.TrainerMedalStatus
 import go.tracker.models.trainer.TrainerStatus
 import go.tracker.persistence.entity.trainer.TrainerStatusEntity
+import go.tracker.persistence.mapper.to.entity.ToGoalsEntity
 import go.tracker.persistence.mapper.to.entity.ToMedalStatusToEntity
 import go.tracker.persistence.mapper.to.entity.ToTrainerEntityMapper
-import go.tracker.persistence.mapper.to.entity.ToTrainerStatusToEntity
+import go.tracker.persistence.mapper.to.entity.ToTrainerStatusEntity
 import go.tracker.persistence.mapper.to.model.ToMedalStatusMapper
 import go.tracker.persistence.mapper.to.model.ToTrainer
 import go.tracker.persistence.mapper.to.model.ToTrainerMapper
+import go.tracker.persistence.repository.GoalsRepository
 import go.tracker.persistence.repository.trainer.MedalStatusRepository
 import go.tracker.persistence.repository.trainer.TrainerRepository
 import go.tracker.persistence.repository.trainer.TrainerStatusRepository
@@ -22,7 +25,8 @@ import java.util.*
 class TrainerPersistenceService(
     private val trainerRepository: TrainerRepository,
     private val trainerStatusRepository: TrainerStatusRepository,
-    private val medalStatusRepository: MedalStatusRepository
+    private val medalStatusRepository: MedalStatusRepository,
+    private val goalsRepository: GoalsRepository
 ) {
     fun existByIgn(ign: String): Boolean = trainerRepository.existsByIgn(ign)
 
@@ -46,7 +50,7 @@ class TrainerPersistenceService(
         trainerStatus.username?.let {
             trainerRepository.findByEmail(it).let { trainerEntity ->
                 trainerStatusRepository.save(
-                    ToTrainerStatusToEntity.map(trainerStatus).apply { trainer = trainerEntity.get() }
+                    ToTrainerStatusEntity.map(trainerStatus).apply { trainer = trainerEntity.get() }
                 )
             }
         }
@@ -80,5 +84,10 @@ class TrainerPersistenceService(
             }
         }
         return responseList
+    }
+
+    fun createTrainerGoal(trainerGoal: TrainerGoal, trainer: Trainer) {
+        val trainerEntity = ToTrainerEntityMapper.map(trainer)
+        goalsRepository.save(ToGoalsEntity.map(trainerGoal).apply { this.trainer = trainerEntity })
     }
 }

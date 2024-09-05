@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springdoc.api.ErrorMessage
 
-@Operation(description = "Encontrara status de medalhas de treinador")
+@Operation(description = "Encontrar status de medalhas de treinador")
 @ApiResponses(value = [
         ApiResponse(
             responseCode = "201",
