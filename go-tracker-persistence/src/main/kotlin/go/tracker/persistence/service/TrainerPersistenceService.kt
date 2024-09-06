@@ -1,18 +1,13 @@
 package go.tracker.persistence.service
 
 import go.tracker.models.enums.Medals
-import go.tracker.models.trainer.Trainer
-import go.tracker.models.trainer.TrainerGoal
-import go.tracker.models.trainer.TrainerMedalStatus
-import go.tracker.models.trainer.TrainerStatus
+import go.tracker.models.trainer.*
 import go.tracker.persistence.entity.trainer.TrainerStatusEntity
-import go.tracker.persistence.mapper.to.entity.ToGoalsEntity
-import go.tracker.persistence.mapper.to.entity.ToMedalStatusToEntity
-import go.tracker.persistence.mapper.to.entity.ToTrainerEntityMapper
-import go.tracker.persistence.mapper.to.entity.ToTrainerStatusEntity
+import go.tracker.persistence.mapper.to.entity.*
 import go.tracker.persistence.mapper.to.model.ToMedalStatusMapper
 import go.tracker.persistence.mapper.to.model.ToTrainer
 import go.tracker.persistence.mapper.to.model.ToTrainerMapper
+import go.tracker.persistence.repository.GoalEntryRepository
 import go.tracker.persistence.repository.GoalsRepository
 import go.tracker.persistence.repository.trainer.MedalStatusRepository
 import go.tracker.persistence.repository.trainer.TrainerRepository
@@ -26,7 +21,8 @@ class TrainerPersistenceService(
     private val trainerRepository: TrainerRepository,
     private val trainerStatusRepository: TrainerStatusRepository,
     private val medalStatusRepository: MedalStatusRepository,
-    private val goalsRepository: GoalsRepository
+    private val goalsRepository: GoalsRepository,
+    private val goalEntry: GoalEntryRepository
 ) {
     fun existByIgn(ign: String): Boolean = trainerRepository.existsByIgn(ign)
 
@@ -73,6 +69,7 @@ class TrainerPersistenceService(
         return medalStatus
     }
 
+    @Transactional
     fun findLastMedalStatus(id: Long): MutableList<TrainerMedalStatus> {
         val responseList: MutableList<TrainerMedalStatus> = mutableListOf()
         val toList = Medals.entries.map { it.name }
@@ -86,8 +83,14 @@ class TrainerPersistenceService(
         return responseList
     }
 
+    @Transactional
     fun createTrainerGoal(trainerGoal: TrainerGoal, trainer: Trainer) {
         val trainerEntity = ToTrainerEntityMapper.map(trainer)
         goalsRepository.save(ToGoalsEntity.map(trainerGoal).apply { this.trainer = trainerEntity })
+    }
+
+    @Transactional
+    fun createTrainerGoalEntry(trainerGoalEntry: TrainerGoalEntry) {
+        goalEntry.save(ToGoalsEntryEntity.map(trainerGoalEntry))
     }
 }

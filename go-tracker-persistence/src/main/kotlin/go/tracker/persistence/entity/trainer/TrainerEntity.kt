@@ -1,5 +1,6 @@
 package go.tracker.persistence.entity.trainer
 
+import go.tracker.persistence.entity.GoalsEntity
 import go.tracker.persistence.entity.user.AppUserEntity
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -45,6 +46,6 @@ class TrainerEntity(
     @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var medals: MutableList<MedalStatusEntity>? = mutableListOf()
 
-//    @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-//    var goals: MutableList<GoalsEntity>? = mutableListOf()
+    @OneToMany(mappedBy = "trainer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var goals: MutableList<GoalsEntity>? = mutableListOf()
 }

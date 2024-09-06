@@ -1,14 +1,8 @@
 package go.tracker.domain.service
 
 import go.tracker.models.enums.UserType
-import go.tracker.models.exceptions.InvalidMedalStatusException
-import go.tracker.models.exceptions.InvalidTrainerStatusException
-import go.tracker.models.exceptions.MedalStatusNotFoundException
-import go.tracker.models.exceptions.TrainerNotFoundException
-import go.tracker.models.trainer.Trainer
-import go.tracker.models.trainer.TrainerGoal
-import go.tracker.models.trainer.TrainerMedalStatus
-import go.tracker.models.trainer.TrainerStatus
+import go.tracker.models.exceptions.*
+import go.tracker.models.trainer.*
 import go.tracker.models.trainer.medals.MedalsValues
 import go.tracker.persistence.service.TrainerPersistenceService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -95,5 +89,22 @@ class TrainerService(
         trainerPersistenceService.findByEmail(username).map { trainer ->
             trainerPersistenceService.createTrainerGoal(trainerGoal, trainer)
         }
+    }
+
+    @Throws(InvalidTrainerGoalEntryException::class)
+    fun createTrainerGoalEntry(request: TrainerGoalEntry, username: String)  {
+        trainerPersistenceService.findByEmail(username).map { trainer ->
+            if (trainer.goals != null && existGoal(trainer.goals!!, request)) {
+                val goalEntity = trainer.goals!!.stream().filter{ it.goalType == request.goalType }.findAny().get()
+                    trainerPersistenceService.createTrainerGoalEntry(request.apply { this.trainerGoal = goalEntity })
+            } else throw InvalidTrainerGoalEntryException()
+        }
+    }
+
+    private fun existGoal(goals: List<TrainerGoal>, request: TrainerGoalEntry): Boolean {
+        goals.forEach {
+            if (it.goalType == request.goalType) return true
+        }
+        return false
     }
 }
