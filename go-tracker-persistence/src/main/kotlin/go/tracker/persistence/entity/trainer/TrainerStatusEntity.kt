@@ -1,6 +1,7 @@
 package go.tracker.persistence.entity.trainer
 
 import jakarta.persistence.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity(name = "TrainerStatus")
@@ -11,19 +12,16 @@ class TrainerStatusEntity {
     @Column(name = "IDT_TRAINER_STATUS")
     var id: Long? = null
 
-    @Column(name = "XP", columnDefinition = "INTEGER", nullable = false)
-    var xp: Long? = null
+    @Column(name = "XP", columnDefinition = "DECIMAL(19, 4)", nullable = false)
+    var xp: BigDecimal? = null
 
-    @Column(name = "DUST", columnDefinition = "INTEGER", nullable = false)
-    var dust: Long? = null
+    @Column(name = "DUST", columnDefinition = "DECIMAL(19, 4)", nullable = false)
+    var dust: BigDecimal? = null
 
-    @Column(name = "CATCHES", columnDefinition = "INTEGER", nullable = false)
-    var catches: Long? = null
-
-    @Column(name = "DAT_CREATED", columnDefinition = "DATE", nullable = false )
+    @Column(name = "DAT_CREATED", columnDefinition = "DATE", nullable = false)
     var entryDate: LocalDateTime? = LocalDateTime.now()
 
     @ManyToOne
     @JoinColumn(name = "IDT_TRAINER", columnDefinition = "INTEGER", nullable = false)
-    var trainer : TrainerEntity? =  null
+    var trainer: TrainerEntity? = null
 }

@@ -68,6 +68,12 @@ class GlobalExceptionHandler(
         return ResponseEntity(response, HttpStatus.NOT_FOUND)
     }
 
+    @ExceptionHandler(TrainerGoalsNotFoundException::class)
+    fun handleTrainerGoalsNotFoundException(ex: TrainerGoalsNotFoundException): ResponseEntity<ApiResponse> {
+        val response = ApiResponse().fromSet(setOf(MessageCode.TRAINER_GOALS_NOT_FOUND, ex.message.toString()))
+        return ResponseEntity(response, HttpStatus.NOT_FOUND)
+    }
+
     private fun map(code: String, args: Array<String>?) = setOf(
         code, source.getMessage(code, args, Locale.getDefault())
     )

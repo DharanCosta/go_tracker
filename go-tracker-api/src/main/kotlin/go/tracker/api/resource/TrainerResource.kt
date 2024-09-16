@@ -1,10 +1,12 @@
 package go.tracker.api.resource
 
+import go.tracker.api.request.GoalEntryRequest
 import go.tracker.api.request.GoalRequest
 import go.tracker.api.request.trainer.MedalsRequest
 import go.tracker.api.request.trainer.TrainerStatusRequest
 import go.tracker.api.response.TrainerProfileResponse
 import go.tracker.api.response.medals.MedalStatusResponse
+import go.tracker.api.response.medals.TrainerGoalsResponse
 import go.tracker.api.swagger.*
 import go.tracker.domain.service.TrainerService
 import go.tracker.models.exceptions.InvalidCredentialsException
@@ -58,7 +60,7 @@ class TrainerResource(
     }
 
     @CreateTrainerMedalStatusSwaggerAPI
-    @PostMapping("/medal")
+    @PostMapping("/medals")
     fun updateTrainerStatus(@RequestBody medalsRequest: MedalsRequest): ResponseEntity<Unit> {
         val username = getAuthenticatedUsername()
 
@@ -70,13 +72,36 @@ class TrainerResource(
         }
     }
 
+    @FindTrainerGoalsSwaggerAPI
+    @GetMapping("/goals", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTrainerGoals(): ResponseEntity<TrainerGoalsResponse> {
+        val username = getAuthenticatedUsername()
+
+        return ResponseEntity.ok(
+            TrainerGoalsResponse(trainerService.findTrainerGoals(username!!))
+        )
+    }
+
     @CreateTrainerGoalSwaggerAPI
-    @PostMapping("/goal")
-    fun createTrainerGoal(@RequestBody goalRequest: GoalRequest): ResponseEntity<Unit> {
+    @PostMapping("/goals")
+    fun createTrainerGoal(@RequestBody goalRequest: List<GoalRequest>): ResponseEntity<Unit> {
         val username = getAuthenticatedUsername()
 
         return if (username != null) {
-            trainerService.createTrainerGoal(goalRequest.toDomain(goalRequest), username)
+            trainerService.createTrainerGoals(goalRequest.map { it.toDomain(it) }, username)
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @CreateTrainerGoalEntrySwaggerAPI
+    @PostMapping("/goals_entry")
+    fun createTrainerGoalEntry(@RequestBody goalEntryRequest: List<GoalEntryRequest>): ResponseEntity<Unit> {
+        val username = getAuthenticatedUsername()
+
+        return if (username != null) {
+            trainerService.createTrainerGoalEntry(goalEntryRequest.map { it.toDomain(it) }, username)
             ResponseEntity.ok().build()
         } else {
             ResponseEntity.noContent().build()

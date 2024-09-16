@@ -9,6 +9,7 @@ import go.tracker.models.trainer.TrainerGoal
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotNull
 import org.springframework.format.annotation.DateTimeFormat
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -29,7 +30,7 @@ data class GoalRequest(
     @JsonProperty(value = "value")
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     @field: NotNull
-    val goalValue: Long? = null,
+    val goalValue: BigDecimal? = null,
 
     @JsonProperty(value = "end_date")
     @JsonFormat(pattern = "dd-MM-yyyy")

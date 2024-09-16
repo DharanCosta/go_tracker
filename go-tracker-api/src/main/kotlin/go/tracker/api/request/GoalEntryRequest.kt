@@ -7,6 +7,7 @@ import go.tracker.models.enums.Medals
 import go.tracker.models.trainer.TrainerGoalEntry
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotNull
+import java.math.BigDecimal
 
 data class GoalEntryRequest(
     @JsonProperty(value = "type")
@@ -24,7 +25,7 @@ data class GoalEntryRequest(
     @JsonProperty(value = "value")
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     @field: NotNull
-    val goalValue: Long? = null,
+    val goalValue: BigDecimal? = null,
 ) {
     fun toDomain(request: GoalEntryRequest): TrainerGoalEntry =
         TrainerGoalEntry().apply {

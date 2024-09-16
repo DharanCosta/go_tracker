@@ -84,13 +84,13 @@ class TrainerPersistenceService(
     }
 
     @Transactional
-    fun createTrainerGoal(trainerGoal: TrainerGoal, trainer: Trainer) {
+    fun createTrainerGoals(trainerGoals: List<TrainerGoal>, trainer: Trainer) {
         val trainerEntity = ToTrainerEntityMapper.map(trainer)
-        goalsRepository.save(ToGoalsEntity.map(trainerGoal).apply { this.trainer = trainerEntity })
+        goalsRepository.saveAll(trainerGoals.map { ToGoalsEntity.map(it).apply { this.trainer = trainerEntity } })
     }
 
     @Transactional
-    fun createTrainerGoalEntry(trainerGoalEntry: TrainerGoalEntry) {
-        goalEntry.save(ToGoalsEntryEntity.map(trainerGoalEntry))
+    fun createTrainerGoalEntry(trainerGoalEntry: List<TrainerGoalEntry>) {
+        goalEntry.saveAll(trainerGoalEntry.map { ToGoalsEntryEntity.map(it) })
     }
 }

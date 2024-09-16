@@ -1,22 +1,24 @@
 package go.tracker.api.response.medals
 
+import java.math.BigDecimal
+
 data class TypeMedalsValuesResponse(
-    var schoolkid: Long? = null,
-    var blackBelt: Long? = null,
-    var birdKeeper: Long? = null,
-    var punkGirl: Long? = null,
-    var ruinManiac: Long? = null,
-    var hiker: Long? = null,
-    var bugCatcher: Long? = null,
-    var hexManiac: Long? = null,
-    var depotAgent: Long? = null,
-    var kindler: Long? = null,
-    var swimmer: Long? = null,
-    var gardener: Long? = null,
-    var rocker: Long? = null,
-    var psychic: Long? = null,
-    var skier: Long? = null,
-    var dragonTamer: Long? = null,
-    var delinquent: Long? = null,
-    var fairyTaleGirl: Long? = null
+    var schoolkid: BigDecimal? = null,
+    var blackBelt: BigDecimal? = null,
+    var birdKeeper: BigDecimal? = null,
+    var punkGirl: BigDecimal? = null,
+    var ruinManiac: BigDecimal? = null,
+    var hiker: BigDecimal? = null,
+    var bugCatcher: BigDecimal? = null,
+    var hexManiac: BigDecimal? = null,
+    var depotAgent: BigDecimal? = null,
+    var kindler: BigDecimal? = null,
+    var swimmer: BigDecimal? = null,
+    var gardener: BigDecimal? = null,
+    var rocker: BigDecimal? = null,
+    var psychic: BigDecimal? = null,
+    var skier: BigDecimal? = null,
+    var dragonTamer: BigDecimal? = null,
+    var delinquent: BigDecimal? = null,
+    var fairyTaleGirl: BigDecimal? = null
 )

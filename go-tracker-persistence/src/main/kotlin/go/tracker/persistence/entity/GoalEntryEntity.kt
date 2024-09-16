@@ -1,6 +1,7 @@
 package go.tracker.persistence.entity
 
 import jakarta.persistence.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity(name ="GoalEntry")
@@ -15,8 +16,8 @@ class GoalEntryEntity {
     @JoinColumn(name = "IDT_GOAL", columnDefinition = "INTEGER", nullable = false)
     var goal: GoalsEntity? = null
 
-    @Column(name = "ENTRY_VALUE", columnDefinition = "INTEGER", nullable = false)
-    var entry: Long? = null
+    @Column(name = "ENTRY_VALUE", columnDefinition = "DECIMAL(19, 4)", nullable = false)
+    var entry: BigDecimal? = null
 
     @Column(name = "ENTRY_DATE", columnDefinition = "DATE", nullable = false)
     var date: LocalDateTime? = LocalDateTime.now()

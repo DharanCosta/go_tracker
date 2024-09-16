@@ -1,5 +1,6 @@
 package go.tracker.domain.service
 
+import go.tracker.models.enums.Medals
 import go.tracker.models.enums.UserType
 import go.tracker.models.exceptions.*
 import go.tracker.models.trainer.*
@@ -7,6 +8,7 @@ import go.tracker.models.trainer.medals.MedalsValues
 import go.tracker.persistence.service.TrainerPersistenceService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import java.util.*
 import kotlin.jvm.optionals.getOrElse
 
@@ -30,27 +32,12 @@ class TrainerService(
     }
 
     fun createStatusEntry(trainerStatus: TrainerStatus) {
-        trainerPersistenceService.findByEmail(trainerStatus.username!!).ifPresent {
-            if (validateTrainerStatus(trainerStatus, it.id!!)) {
-                trainerPersistenceService.createTrainerStatusEntry(trainerStatus)
-            }
+        trainerPersistenceService.findByEmail(trainerStatus.username!!).ifPresent { trainer ->
+            trainerPersistenceService.createTrainerStatusEntry(trainerStatus)
+            saveInMedals(trainerStatus.catches!!, Medals.COLLECTOR, trainer)
+            saveInMedals(trainerStatus.distance!!, Medals.JOGGER, trainer)
+            saveInMedals(trainerStatus.pokestops!!, Medals.BACKPACKER, trainer)
         }
-    }
-
-    @Throws(InvalidTrainerStatusException::class)
-    private fun validateTrainerStatus(trainerStatus: TrainerStatus, trainerId: Long): Boolean {
-        trainerPersistenceService.findLastTrainerStatus(trainerId).let { trainerStatusEntity ->
-            if (trainerStatusEntity != null) {
-                require(trainerStatusEntity.xp!! < trainerStatus.xp!!) {
-                    throw InvalidTrainerStatusException("XP in the new status cannot be less than the existing XP")
-                }
-                require(trainerStatusEntity.catches!! < trainerStatus.catches!!) {
-                    throw InvalidTrainerStatusException("Catches in the new status cannot be less than the existing catches")
-                }
-            }
-        }
-
-        return true
     }
 
     @Throws(MedalStatusNotFoundException::class)
@@ -67,7 +54,6 @@ class TrainerService(
     fun createMedalStatusEntry(medalStatusList: List<TrainerMedalStatus>, username: String): Boolean {
         trainerPersistenceService.findByEmail(username).map { trainer ->
             medalStatusList.forEach { medalStatus ->
-                // Check if the medal is finite and if there's already a record with the maximum allowed number
                 if (medalStatus.medal!!.finite && hasReachedMaxAllowed(medalStatus)) {
                     throw InvalidMedalStatusException(
                         medalStatus.medal!!.medalName,
@@ -80,24 +66,32 @@ class TrainerService(
         return true
     }
 
-    private fun hasReachedMaxAllowed(medalStatus: TrainerMedalStatus): Boolean {
-        val maxAllowed = medalStatus.medal!!.getMedalLimit(medalStatus.medal!!)
-        return medalStatus.value?.compareTo(maxAllowed)!! == 1
+    fun findTrainerGoals(username: String): List<TrainerGoal> {
+        val trainer = trainerPersistenceService.findByEmail(username).get().takeIf { it.goals != null }
+        if (trainer != null) {
+            return trainer.goals!!.toList()
+        } else throw TrainerGoalsNotFoundException()
     }
 
-    fun createTrainerGoal(trainerGoal: TrainerGoal, username: String) {
+    fun createTrainerGoals(trainerGoals: List<TrainerGoal>, username: String) {
         trainerPersistenceService.findByEmail(username).map { trainer ->
-            trainerPersistenceService.createTrainerGoal(trainerGoal, trainer)
+            trainerPersistenceService.createTrainerGoals(trainerGoals, trainer)
         }
     }
 
     @Throws(InvalidTrainerGoalEntryException::class)
-    fun createTrainerGoalEntry(request: TrainerGoalEntry, username: String)  {
+    fun createTrainerGoalEntry(request: List<TrainerGoalEntry>, username: String) {
         trainerPersistenceService.findByEmail(username).map { trainer ->
-            if (trainer.goals != null && existGoal(trainer.goals!!, request)) {
-                val goalEntity = trainer.goals!!.stream().filter{ it.goalType == request.goalType }.findAny().get()
-                    trainerPersistenceService.createTrainerGoalEntry(request.apply { this.trainerGoal = goalEntity })
-            } else throw InvalidTrainerGoalEntryException()
+            val goalsEntryToAdd: MutableList<TrainerGoalEntry> = mutableListOf()
+            request.forEach { goal ->
+                val goalEntity = trainer.goals!!.stream().filter { it.goalType == goal.goalType }.findAny().get()
+                if (trainer.goals != null && existGoal(trainer.goals!!, goal)) {
+                    goalsEntryToAdd.add(goal.apply { this.trainerGoal = goalEntity })
+                } else throw InvalidTrainerGoalEntryException()
+            }
+            if (goalsEntryToAdd.isNotEmpty()) {
+                trainerPersistenceService.createTrainerGoalEntry(goalsEntryToAdd)
+            }
         }
     }
 
@@ -107,4 +101,17 @@ class TrainerService(
         }
         return false
     }
+
+    private fun saveInMedals(value: BigDecimal, medal: Medals, trainer: Trainer) {
+        trainerPersistenceService.createMedalStatusEntry(
+            listOf(TrainerMedalStatus(value = value, medal = medal)),
+            trainer
+        )
+    }
+
+    private fun hasReachedMaxAllowed(medalStatus: TrainerMedalStatus): Boolean {
+        val maxAllowed = medalStatus.medal!!.getMedalLimit(medalStatus.medal!!)
+        return medalStatus.value?.compareTo(BigDecimal(maxAllowed))!! == 1
+    }
+
 }

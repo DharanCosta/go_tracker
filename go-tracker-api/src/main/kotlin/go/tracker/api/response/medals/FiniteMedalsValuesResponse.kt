@@ -1,7 +1,9 @@
 package go.tracker.api.response.medals
 
-data class FiniteMedalsValuesResponse (
-    var unown: Long? = null,
-    var megaEvolutionGuru: Long? = null,
-    var vivillon: Long? = null,
+import java.math.BigDecimal
+
+data class FiniteMedalsValuesResponse(
+    var unown: BigDecimal? = null,
+    var megaEvolutionGuru: BigDecimal? = null,
+    var vivillon: BigDecimal? = null,
 )

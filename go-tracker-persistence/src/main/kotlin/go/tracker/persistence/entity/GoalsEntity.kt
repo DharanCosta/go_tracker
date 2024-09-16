@@ -4,6 +4,7 @@ import go.tracker.models.enums.GoalType
 import go.tracker.models.enums.Medals
 import go.tracker.persistence.entity.trainer.TrainerEntity
 import jakarta.persistence.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity(name = "Goals")
@@ -26,8 +27,8 @@ class GoalsEntity {
     @Column(name = "MEDAL_NAME", columnDefinition = "VARCHAR2(50)")
     var medalName: Medals? = null
 
-    @Column(name = "GOAL_VALUE", columnDefinition = "INTEGER", nullable = false)
-    var goalValue: Long? = null
+    @Column(name = "GOAL_VALUE", columnDefinition = "DECIMAL(19, 4)", nullable = false)
+    var goalValue: BigDecimal? = null
 
     @Column(name = "START_DATE", columnDefinition = "DATE", nullable = false)
     var startDate: LocalDateTime? = LocalDateTime.now()

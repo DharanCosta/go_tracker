@@ -1,9 +1,9 @@
 package go.tracker.persistence.mapper.to.model
 
 import go.tracker.commons.mapper.Mapper
+import go.tracker.models.trainer.Trainer
 import go.tracker.models.user.Address
 import go.tracker.models.user.Phone
-import go.tracker.models.trainer.Trainer
 import go.tracker.persistence.entity.trainer.TrainerEntity
 
 val ToTrainerMapper =
@@ -21,7 +21,7 @@ val ToTrainerMapper =
             name = trainer.name
             birthDate = trainer.birthDate
             type = trainer.type
-//                goals = trainer.goals
+            goals = ToTrainerGoals.map(trainer.goals)
             address = Address().apply {
                 id = trainer.address?.id
                 country = trainer.address?.country

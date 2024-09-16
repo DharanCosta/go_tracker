@@ -5,12 +5,11 @@ import go.tracker.models.trainer.TrainerStatus
 import go.tracker.persistence.entity.trainer.TrainerStatusEntity
 import java.time.LocalDateTime
 
-val ToTrainerStatusEntity  =
+val ToTrainerStatusEntity =
     Mapper<TrainerStatus, TrainerStatusEntity> { status ->
-       TrainerStatusEntity().apply {
-           xp = status.xp
-           dust = status.dust
-           catches = status.catches
-           entryDate = LocalDateTime.now()
-       }
-}
+        TrainerStatusEntity().apply {
+            xp = status.xp
+            dust = status.dust
+            entryDate = LocalDateTime.now()
+        }
+    }
