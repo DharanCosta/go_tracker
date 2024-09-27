@@ -53,10 +53,12 @@ class JwtUtil {
     }
 
     fun getRolesFromToken(token: String): List<String> {
-        val claims = Jwts.parser()
-            .setSigningKey(secret)
+        val claims = Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
             .parseClaimsJws(token)
             .body
+
         return claims["roles"] as List<String>
     }
 

@@ -35,7 +35,7 @@ data class TrainerCreateRequest(
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     @field: NotNull (message = MessageCode.REQUIRED_FIELD)
-    @field: JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @field: JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @field: JsonProperty("birth_date")
     var birthDate: LocalDate? = LocalDate.now(),
 
@@ -49,7 +49,7 @@ data class TrainerCreateRequest(
     var level: Int? = 0,
 
     @field: Schema(requiredMode = Schema.RequiredMode.REQUIRED)
-    @field: JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @field: JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @field: JsonProperty("start_date")
     var startDate: LocalDate = LocalDate.now(),
 

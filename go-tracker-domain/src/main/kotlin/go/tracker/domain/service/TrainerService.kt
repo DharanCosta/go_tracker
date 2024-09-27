@@ -17,6 +17,8 @@ class TrainerService(
     private val trainerPersistenceService: TrainerPersistenceService,
     private val passwordEncoder: PasswordEncoder
 ) {
+    fun existEmail(email: String): Boolean = trainerPersistenceService.existByEmail(email)
+
     fun createTrainer(trainer: Trainer): Trainer {
         trainer.password = encodePassword(trainer.password!!)
         trainer.type = UserType.USER
