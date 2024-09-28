@@ -8,11 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springdoc.api.ErrorMessage
 
-@Operation(description = "Encontrar status de medalhas de treinador")
+@Operation(description = "Encontrar metas do treinador")
 @ApiResponses(value = [
         ApiResponse(
             responseCode = "201",
-            description = "Status de medalha encontrado",
+            description = "Metas encontradas",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -21,7 +21,7 @@ import org.springdoc.api.ErrorMessage
         ]),
         ApiResponse(
             responseCode = "404",
-            description = "Status de medalha não encontrado",
+            description = "Metas não encontrada",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -33,4 +33,4 @@ import org.springdoc.api.ErrorMessage
 )
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class FindTrainerLastMedalStatusSwaggerAPI
+annotation class FindTrainerGoalsSwaggerAPI

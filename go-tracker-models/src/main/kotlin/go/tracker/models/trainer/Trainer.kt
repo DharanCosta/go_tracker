@@ -9,8 +9,8 @@ data class Trainer (
     var startDate: LocalDate = LocalDate.now(),
     var initialXP: Long? = null,
     var initialCatch: Long? = null,
-    var public: Boolean? = false
-//    var goals: List<GoalsEntity>?=  null
+    var public: Boolean? = false,
+    var goals: MutableList<TrainerGoal>?=  null
 ) : User() {
     override fun isTrainer(): Boolean  = true
 }

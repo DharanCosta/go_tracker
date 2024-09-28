@@ -1,8 +1,12 @@
 package go.tracker.models.trainer
 
-data class TrainerStatus (
-    var xp: Long? = null,
-    var dust: Long? = null,
-    var catches: Long? = null,
+import java.math.BigDecimal
+
+data class TrainerStatus(
+    var xp: BigDecimal? = null,
+    var dust: BigDecimal? = null,
+    var catches: BigDecimal? = null,
+    var pokestops: BigDecimal? = null,
+    var distance: BigDecimal? = null,
     var username: String? = null
 )

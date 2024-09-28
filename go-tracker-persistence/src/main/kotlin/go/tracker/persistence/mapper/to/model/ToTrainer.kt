@@ -18,5 +18,6 @@ val ToTrainer =
             name = trainerEntity.name
             address = trainerEntity.address?.let { ToAddress.map(it) }
             phone = trainerEntity.phone?.let { ToPhone.map(it) }
+            goals = ToTrainerGoals.map(trainerEntity.goals) ?: null
         }
     }

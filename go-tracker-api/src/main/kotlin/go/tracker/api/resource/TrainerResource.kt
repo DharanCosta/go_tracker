@@ -1,13 +1,13 @@
 package go.tracker.api.resource
 
-import go.tracker.api.request.trainer.TrainerStatusRequest
+import go.tracker.api.request.GoalEntryRequest
+import go.tracker.api.request.GoalRequest
 import go.tracker.api.request.trainer.MedalsRequest
+import go.tracker.api.request.trainer.TrainerStatusRequest
 import go.tracker.api.response.TrainerProfileResponse
 import go.tracker.api.response.medals.MedalStatusResponse
-import go.tracker.api.swagger.CreateTrainerMedalStatusSwaggerAPI
-import go.tracker.api.swagger.CreateTrainerStatusSwaggerAPI
-import go.tracker.api.swagger.FindTrainerLastMedalStatusSwaggerAPI
-import go.tracker.api.swagger.FindTrainerProfileSwaggerAPI
+import go.tracker.api.response.medals.TrainerGoalsResponse
+import go.tracker.api.swagger.*
 import go.tracker.domain.service.TrainerService
 import go.tracker.models.exceptions.InvalidCredentialsException
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -36,10 +36,10 @@ class TrainerResource(
 
     @CreateTrainerStatusSwaggerAPI
     @PostMapping("/status")
-    fun updateTrainerStatus(@RequestBody trainerStatusRequest: TrainerStatusRequest) : ResponseEntity<Unit>{
+    fun updateTrainerStatus(@RequestBody trainerStatusRequest: TrainerStatusRequest): ResponseEntity<Unit> {
         val username = getAuthenticatedUsername()
 
-        return  if (username != null) {
+        return if (username != null) {
             trainerService.createStatusEntry(trainerStatusRequest.toDomain(trainerStatusRequest, username))
             ResponseEntity.ok().build()
         } else {
@@ -52,17 +52,56 @@ class TrainerResource(
     fun getLastMedalStatus(): ResponseEntity<MedalStatusResponse> {
         val username = getAuthenticatedUsername()
 
-       return ResponseEntity.ok(MedalStatusResponse().mapToMedalStatusResponse(
-           trainerService.findLastMedalStatus(username!!)))
+        return ResponseEntity.ok(
+            MedalStatusResponse().mapToMedalStatusResponse(
+                trainerService.findLastMedalStatus(username!!)
+            )
+        )
     }
 
     @CreateTrainerMedalStatusSwaggerAPI
-    @PostMapping("/medal")
-    fun updateTrainerStatus(@RequestBody medalsRequest: MedalsRequest) : ResponseEntity<Unit>{
+    @PostMapping("/medals")
+    fun updateTrainerStatus(@RequestBody medalsRequest: MedalsRequest): ResponseEntity<Unit> {
         val username = getAuthenticatedUsername()
 
-        return  if (username != null) {
+        return if (username != null) {
             trainerService.createMedalStatusEntry(medalsRequest.toDomainList(medalsRequest), username)
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @FindTrainerGoalsSwaggerAPI
+    @GetMapping("/goals", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTrainerGoals(): ResponseEntity<TrainerGoalsResponse> {
+        val username = getAuthenticatedUsername()
+
+        return ResponseEntity.ok(
+            TrainerGoalsResponse(trainerService.findTrainerGoals(username!!))
+        )
+    }
+
+    @CreateTrainerGoalSwaggerAPI
+    @PostMapping("/goals")
+    fun createTrainerGoal(@RequestBody goalRequest: List<GoalRequest>): ResponseEntity<Unit> {
+        val username = getAuthenticatedUsername()
+
+        return if (username != null) {
+            trainerService.createTrainerGoals(goalRequest.map { it.toDomain(it) }, username)
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @CreateTrainerGoalEntrySwaggerAPI
+    @PostMapping("/goals_entry")
+    fun createTrainerGoalEntry(@RequestBody goalEntryRequest: List<GoalEntryRequest>): ResponseEntity<Unit> {
+        val username = getAuthenticatedUsername()
+
+        return if (username != null) {
+            trainerService.createTrainerGoalEntry(goalEntryRequest.map { it.toDomain(it) }, username)
             ResponseEntity.ok().build()
         } else {
             ResponseEntity.noContent().build()

@@ -7,12 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springdoc.api.ErrorMessage
 
-@Operation(description = "Criação de status de medalha")
+@Operation(description = "Criação de entrada para meta")
 @ApiResponses(
     value = [
         ApiResponse(
             responseCode = "200",
-            description = "Status de medalha cadastrado",
+            description = "Entrada de meta cadastrada",
             content = [
                 Content(
                     mediaType = "application/json"
@@ -21,7 +21,7 @@ import org.springdoc.api.ErrorMessage
         ),
         ApiResponse(
             responseCode = "204",
-            description = "Status de medalha não cadastrado",
+            description = "Entrada de meta não cadastrado",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -31,7 +31,7 @@ import org.springdoc.api.ErrorMessage
         ),
         ApiResponse(
             responseCode = "400",
-            description = "Status de medalha inválidos",
+            description = "Entrada de meta inválida",
             content = [
                 Content(
                     mediaType = "application/json",
@@ -53,4 +53,4 @@ import org.springdoc.api.ErrorMessage
 )
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CreateTrainerMedalStatusSwaggerAPI
+annotation class CreateTrainerGoalEntrySwaggerAPI
